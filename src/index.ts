@@ -30,6 +30,9 @@ const handleUserInput = (input: string) => {
     case '2':
       showGameRecords();
       break;
+    case '3':
+      showTotalGameRecords();
+      break;
     case '9':
       endGame();
       break;
@@ -63,4 +66,8 @@ const showGameRecords = () => {
   updateGameMessage(result, message);
   isViewingRecords = true;
   userInput.value = '';
+};
+
+const showTotalGameRecords = () => {
+  updateGameMessage(result, game.getTotalListRecords());
 };

@@ -100,6 +100,7 @@ export const createGame = () => {
       attempt: record.attempt,
     }));
   };
+
   const getDetailGameRecords = (id: number) => {
     const record = gameRecord.find((record) => record.id === id);
     if (!record) {
@@ -119,6 +120,36 @@ export const createGame = () => {
     return detail;
   };
 
+  const getTotalListRecords = () => {
+    const successfulGames = gameRecord.filter((record) => record.isSuccess);
+
+    if (successfulGames.length === 0) {
+      return '성공한 기록이 없습니다.';
+    }
+
+    const totalListRecords = successfulGames
+      .map((record) => ({
+        id: record.id,
+        attempt: record.attempt,
+      }))
+      .sort((a, b) => a.attempt - b.attempt);
+
+    const totalAllRecords = totalListRecords.reduce((acc, cur) => {
+      return acc + cur.attempt;
+    }, 0);
+
+    const averageAttempt = totalAllRecords / totalListRecords.length;
+    const first = totalListRecords[0];
+    const last = totalListRecords[totalListRecords.length - 1];
+    return `
+    가장 적은 횟수: ${first.attempt}회 - [${first.id}]
+    가장 많은 횟수: ${last.attempt}회 - [${last.id}]
+    평균횟수: ${averageAttempt.toFixed(2)}회
+    
+    -------통계 종료-------
+        `;
+  };
+
   return {
     startGame,
     resetGame,
@@ -126,5 +157,6 @@ export const createGame = () => {
     getIsGameStarted,
     getGameRecords,
     getDetailGameRecords,
+    getTotalListRecords,
   };
 };
